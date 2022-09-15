@@ -1,13 +1,24 @@
 // Single-sketch example
 
-function setup (){
-  createCanvas (800, 600);
+function setup() {
+  createCanvas(800, 800);
 }
 
-function draw(){
-  background(100);
-  fill(255);
-  noStroke();
-  rectMode(CENTER);
-  rect(mouseX, mouseY, 50, 50);
+let circleA = {
+  originX: 400,
+  originY: 400,
+  radius: 50,
+  strokeColor: 255,
+  sX: 1,
+};
+
+// infinite loop updates by sec
+function draw() {
+  background(0);
+
+  noFill();
+  stroke(circleA.strokeColor);
+  circle(circleA.originX, circleA.originY, circleA.radius);
+  // each loop, update value of originX
+  circleA.originX += circleA.sX;
 }
