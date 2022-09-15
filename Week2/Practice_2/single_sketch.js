@@ -1,13 +1,27 @@
 // Single-sketch example
 
-function setup (){
-  createCanvas (800, 600);
-}
+function setup() {
+  createCanvas(400, 400);
+  background(255);
 
-function draw(){
-  background(100);
-  fill(255);
-  noStroke();
-  rectMode(CENTER);
-  rect(mouseX, mouseY, 50, 50);
+  // declare rect size variables
+  let originX;
+  let originY;
+  let rectWidth;
+  let rectHeight;
+  // distance between rect
+  let rectDistance;
+
+  // assign values
+  (originX = 0), (originY = 0);
+  rectWidth = 100;
+  rectHeight = 400;
+  rectDistance = 100;
+
+  // draw rectangles
+  for (let i = 0; i < 4; i++) {
+    rect(originX, originY, rectWidth, rectHeight);
+    // update orginX each round
+    originX += rectDistance;
+  }
 }
