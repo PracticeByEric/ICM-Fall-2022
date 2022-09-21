@@ -1,9 +1,21 @@
-// One element controlled by mouse
-// One element different everytime you run
+let grow = true;
+
+// set click count
+let clickCount = 0;
+
+// regulate the frame rate
+let setFrame = 30;
 
 function setup() {
+  frameRate(setFrame);
+  // set up different backgrounds
+  let backgroundColors = [5, 10, 15, 20];
   createCanvas(800, 800);
-  background(51);
+  background(random(backgroundColors));
+
+  textSize(15);
+  fill(180);
+  text("In dark mode, click switch to light mode", 260, 780);
 }
 
 // Create object A in object literals
@@ -11,17 +23,34 @@ let abstractObjectA = {
   sideL: 0,
   maxSide: 400,
   minSide: 0,
-  sGrow: 1.5,
+  sGrow: 3,
 
-  sStroke: 1,
+  sStroke: 255 / (setFrame * 5),
   stroke: 0,
+  strokeWeight: 0.2,
 
   angle: 0,
+  angleGrow: 0.015,
 };
 
-let grow = true;
+// mouse click control
+function mouseClicked() {
+  clear();
 
-let runTime = 0;
+  clickCount++;
+
+  if (clickCount % 2 == 0 && clickCount != 0) {
+    background(15);
+    textSize(15);
+    fill(180);
+    text("In dark mode, click switch to light mode.", 260, 780);
+  } else {
+    background(190);
+    textSize(15);
+    fill(10);
+    text("In light mode, click switch to dark mode.", 260, 780);
+  }
+}
 
 // Update by sec
 function draw() {
@@ -31,60 +60,39 @@ function draw() {
 function drawObject(Object1) {
   push();
 
-  abstractObjectA.angle += 0.025;
+  translate(width / 2, height / 2);
 
-  translate(400, 400);
-
-  rotate(abstractObjectA.angle);
+  Object1.angle += Object1.angleGrow;
+  rotate(Object1.angle);
 
   noFill();
-  strokeWeight = 1;
+  strokeWeight += Object1.strokeWeight;
 
-  if (abstractObjectA.sideL >= abstractObjectA.maxSide) {
+  // state of growing and shrinking
+  if (Object1.sideL >= Object1.maxSide) {
     grow = false;
-  }
-  if (abstractObjectA.sideL <= abstractObjectA.minSide) {
+  } else if (Object1.sideL <= Object1.minSide) {
     grow = true;
   }
 
-  CountRunTime(abstractObjectA);
-
   if (grow == true) {
     // increase the size
-    abstractObjectA.sideL += abstractObjectA.sGrow;
-    // increase the stroke #color
-    abstractObjectA.stroke += abstractObjectA.sStroke;
-    if (CountRunTime(abstractObjectA) % 2 == 0) {
-      stroke(150);
-    } else {
-      stroke(abstractObjectA.stroke);
-    }
+    Object1.sideL += abstractObjectA.sGrow;
+    Object1.stroke += abstractObjectA.sStroke;
+    stroke(Object1.stroke);
   } else {
     // decrease the size
-    abstractObjectA.sideL -= abstractObjectA.sGrow;
+    Object1.sideL -= abstractObjectA.sGrow;
     // decrease the stroke #color
-    abstractObjectA.stroke -= abstractObjectA.sStroke;
-    stroke(abstractObjectA.stroke);
+    Object1.stroke -= Object1.sStroke;
+    stroke(Object1.stroke);
   }
 
-  square(
-    -abstractObjectA.sideL / 2,
-    -abstractObjectA.sideL / 2,
-    abstractObjectA.sideL
-  );
+  // draw square
+  square(-Object1.sideL / 2, -Object1.sideL / 2, Object1.sideL);
 
   pop();
 }
 
-// count run time
-function CountRunTime(Object1) {
-  if (Object1.sideL == Object1.maxSide) {
-    runTime += 1;
-  }
-  return runTime;
-}
-// Rotate
-//https://www.youtube.com/watch?v=H6QQIZeVuew
-
-// Grow and shrink
-// https://editor.p5js.org/amcc/sketches/3ZLqytY_4
+// Rotation center
+// https://www.youtube.com/watch?v=H6QQIZeVuew "How to Rotate Multiple Objects in Javascript Coding on P5.js"
